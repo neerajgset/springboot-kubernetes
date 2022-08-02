@@ -15,7 +15,10 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
-		<testcontainers.version>1.17.3</testcontainers.version>
+		<testcontainers.version>1.17.2</testcontainers.version>
+		<jib-maven-plugin.version>3.2.1</jib-maven-plugin.version>
+		<dockerUserName>neerajgset</dockerUserName>
+		<dockerImageName>${dockerUserName}/${project.artifactId}</dockerImageName>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -99,6 +102,10 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<image>
+						<name>${dockerImageName}</name>
+						<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+					</image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -107,19 +114,20 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>${jib-maven-plugin.version}</version>
 				<configuration>
 					<from>
 						<image>eclipse-temurin:17-jdk</image>
 					</from>
 					<to>
-						<image>neerajgset/bookmark-api</image>
+						<image>${dockerImageName}</image>
 						<tags>
 							<tag>latest</tag>
-							<tag>0.0.1</tag>
+							<tag>${project.version}</tag>
 						</tags>
 					</to>
 					<container>
